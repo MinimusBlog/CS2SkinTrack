@@ -5,6 +5,7 @@
 - **Активация**: Команда активации на Windows используется `.venv\Scripts\activate`, а на macOS/Linux — `.venv\bin/activate`
 
 - **dotenv**: Хранение токена бота `pip install python-dotenv`
+- **Telebot**: Библиотека для создания бота `pip install pyTelegramBotAPI`
 - **BeautifulSoup4**: Древо HTML `pip install beautifulsoup4`
 - **requests**: HTTP `pip install requests`
 
