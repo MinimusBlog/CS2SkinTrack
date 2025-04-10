@@ -9,6 +9,9 @@ CS2SkinTrack — настоящий помощник для всех, кто и�
 
 ```sh
 $ git clone https://github.com/yourusername/CS2SkinTrack.git
+```
+
+```sh
 $ cd CS2SkinTrack
 ```
 
