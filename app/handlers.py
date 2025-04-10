@@ -1,12 +1,15 @@
-import os,telebot,json
+import os,telebot,json,requests
 from telebot import types
+from time import sleep
 from dotenv import load_dotenv
+from bs4 import BeautifulSoup
 load_dotenv()
-url = "https://steamcommunity.com/market/listings/730/" #Desert%20Eagle%20%7C%20Sputnik%20%28Battle-Scarred%29"?filter=confetty
+url = "https://steamcommunity.com/market/listings/730/"
 get_text = False
-#bot = telebot.TeleBot(TOKEN,parse_mode=None)
-
-
+out = False
+page = 0
+sticker_name = ""
+pg = 0
 #from telebot import types
 #import logging
 
@@ -14,15 +17,19 @@ get_text = False
 #logging.basicConfig(level=logging.INFO)
 #logger = logging.getLogger()
 def register_handlers(bot):
-    get_text = False
-    url = "https://steamcommunity.com/market/listings/730/" #Desert%20Eagle%20%7C%20Sputnik%20%28Battle-Scarred%29"
+    
+    url = "https://steamcommunity.com/market/listings/730/"
     data_file_path = os.path.join(os.path.dirname(__file__), "data.json")
     with open(data_file_path, "r", encoding="utf-8") as file:
         data = file.read()
-    CATEGORY = json.loads(data)["CATEGORY"]#os.getenv("CATEGORY").split(",")
+    CATEGORY = json.loads(data)["CATEGORY"]
     GUNS = json.loads(data)["GUNS"]
     QUALITY = json.loads(data)["QUALITY"]
-    SKINS = json.loads(data)["SKINS"]
+    
+    ALL_SKINS = []
+    for tip in CATEGORY:
+        for gun in GUNS[tip]:
+            ALL_SKINS.append(GUNS[tip][gun])
     
     @bot.message_handler(commands=['start'])
     def start_message(message):
@@ -47,48 +54,82 @@ def register_handlers(bot):
         bot.send_message(message.chat.id, instructions)
     
    
-
+    
     @bot.callback_query_handler(func=lambda callback: True)
     def callback_message(callback):
         global url
         global get_text
+        global out
+        global page
+        global pg
+   
         @bot.message_handler(content_types=['text'])
         def message_input(message):
+            global page
+            global pg
             global url
+            global out
             global get_text
+            global sticker_name
             if get_text:
+                NUM = "0123456789"
                 if len(message.text)>1:
-                    url += "?filter="+message.text.replace(" ","%20")
-                print(url)
-                bot.send_message(message.chat.id,url)
+                    sticker_name = message.text.replace(" ","+")
+                url_render = url+"/render/?filter="+sticker_name+"&query=&start=0&count=10&country=RU&language=russian&currency=1"
+                render_req = requests.get(url_render)
+                cnt = 54
+                while render_req.text[cnt] in NUM:
+                    cnt += 1
+                bot.send_message(message.chat.id,"всего пушек: "+render_req.text[54:cnt])
+                page = int(render_req.text[54:cnt])//10+1
+                menu_next(message)
                 get_text = False
-                
-        #bot.register_next_step_handler(callback.message,message_input)
-        #bot.delete_message(callback.message.chat.id,callback.message.message_id-1)
+
+        if (callback.data=="Далее"):
+            PRICE_TYPE = ("market_listing_price_with_fee", "market_listing_price_with_publisher_fee_only", "market_listing_price_without_fee")
+            PRICE_TYPE_NAME = ("с комиссией", "с комиссией к публикации", "без комиссии")
+            
+            bot.send_message(callback.message.chat.id,"="*10+"\n"+str(pg+1)+"-ая страница")
+            urll = url+"/?filter="+sticker_name+"&query=&start="+str(pg*10)+"&count=10&country=RU&language=russian&currency=1"
+            if pg == 0:
+                bot.send_message(callback.message.chat.id,"эта ссылка отправит вас на первую страницу."+"\n"+"-"*10+"\n"+urll+"\n"+"-"*10)
+            pg += 1
+            req = requests.get(urll)
+            soup = BeautifulSoup(req.text, "html.parser")
+            
+            for t in PRICE_TYPE:
+                price = soup.find_all("span", class_=t)
+                bot.send_message(callback.message.chat.id,PRICE_TYPE_NAME[PRICE_TYPE.index(t)])
+                stroke = ""
+                for data in price:
+                    stroke+=str(price.index(data) + 1)+data.text[5::]+"\n"
+                bot.send_message(callback.message.chat.id,stroke)
+            if pg<page:
+                menu_next(callback.message)
+            else:
+                menu_end(callback.message)
+            
+
+
         for q in QUALITY:
             if callback.data == q:
                 url+= "%28" + callback.data.replace(" ","%20") + "%29"
                 get_text = True
                 bot.send_message(callback.message.chat.id,"Введите имена стикеров:")
-                #bot.send_message(callback.message.chat.id, "Введите имена стикеров:")
-                
-        for skin in SKINS:
-            if callback.data == skin:
-                url+= "%7C%20" + callback.data.replace(" ","%20") + "%20"
-                menu_quality(callback.message,callback.data)
+
+       
         for tip in CATEGORY:
             if callback.data == tip:
-                #bot.send_message(callback.message.chat.id,callback.data)
                 menu_guns(callback.message,callback.data)
-                #bot.delete_message(callback.message.chat.id,callback.message.message_id-1)
+            
             for gun in GUNS[tip]:
                 if callback.data == gun:
+                    menu_skins(callback.message,tip,gun)
                     url = url + callback.data.replace(" ","%20") + "%20"
-                    menu_skins(callback.message,callback.data)
-             
-        
-        
-        print(url)
+                for skin in GUNS[tip][gun]:
+                    if callback.data == skin:
+                        menu_quality(callback.message,callback.data)
+                        url+= "%7C%20" + callback.data.replace(" ","%20") + "%20"
     
     @bot.message_handler(func=lambda message: message.text == 'Парсинг!')
     def menu_category(message):
@@ -96,7 +137,6 @@ def register_handlers(bot):
         for tip in CATEGORY:
             markup.add(types.InlineKeyboardButton(tip,callback_data=tip))
         bot.reply_to(message, "Выберите тип оружия:",reply_markup=markup)
-#        bot.register_next_step_handler(message,menu_guns)
 
     def menu_guns(message,tmp):
         markup = types.InlineKeyboardMarkup()
@@ -104,12 +144,11 @@ def register_handlers(bot):
             markup.add(types.InlineKeyboardButton(gun,callback_data=gun))
         bot.reply_to(message, "Выберите оружие:",reply_markup=markup)
     
-    def menu_skins(message,tmp):
+    def menu_skins(message,tmp,tmp2):
         markup = types.InlineKeyboardMarkup()
-        for skin in SKINS:
+        for skin in GUNS[tmp][tmp2]:
             markup.add(types.InlineKeyboardButton(skin,callback_data=skin))
         bot.reply_to(message, "Выберите скин:",reply_markup=markup)
-        
 
     def menu_quality(message,tmp):
         markup = types.InlineKeyboardMarkup()
@@ -117,11 +156,10 @@ def register_handlers(bot):
             markup.add(types.InlineKeyboardButton(q,callback_data=q))
         bot.reply_to(message, "Выберите качество:",reply_markup=markup)
 
-
-    #def menu_category(message):
-    #   bot.send_message(message.chat.id,message.text)
-    #   markup = types.ReplyKeyboardMarkup()
-    #   for gun in GUNS:
-    #       markup.add(types.KeyboardButton(tip))#,callback_data=tip))
-    #   bot.reply_to(message, "Выберите оружиt:",reply_markup=markup)
-    #   bot.register_next_step_handler(message,on_click2)
+    def menu_next(message):
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton("Далее",callback_data="Далее"))
+        bot.reply_to(message, "нажмите 'Далее', чтобы продолжить.",reply_markup=markup)
+        
+    def menu_end(message):
+        bot.send_message(message.chat.id,"конец списка.")

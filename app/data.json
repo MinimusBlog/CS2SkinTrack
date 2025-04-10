@@ -1,15 +1,52 @@
 {
   "CATEGORY": ["Knives", "Pistols", "Submachine Guns", "Rifles", "Heavy Weapons", "Grenades"],
-  "GUNS": {
-    "AK-47": ["Safari", "African Mesh", "Redline"],
-    "M4A4": ["Asimov", "Desert Storm", "Neon Rider"],
-    "AWP": ["African Mesh", "Exoskeleton", "Speed Beast"],
-    "Desert Eagle": ["Directive", "Satellite", "Heritage"],
-    "Glock-18": ["Thunderstorm", "Volcano", "Blue Pearl"],
-    "USP-S": ["Serum", "Orion", "Tracing Paper"],
-    "P90": ["Alien", "Darkness", "Blind Spot"],
-    "MP5-SD": ["Phosphorus", "Nitro", "Skilled Hands"]
+  "GUNS":{
+		"Knives":{
+			"Bayonet":["0"],
+			"Bowie Knife":["0"],
+			"Butterfly Knife":["0"],
+			"Classic Knife":["0"],
+			"Falchion Knife":["0"],
+			"Flip Knife":["0"],
+			"Gut Knife":["0"],
+			"Huntsman Knife":["0"],
+			"Karambit":["0"],
+			"Kukri Knife":["0"],
+			"M9 Bayonet":["0"],
+			"Navaja Knife":["0"],
+			"Nomad Knife":["0"],
+			"Paracord Knife":["0"],
+			"Shadow Daggers":["0"],
+			"Skeleton Knife":["0"],
+			"Stiletto Knife":["0"],
+			"Survival Knife":["0"],
+			"Talon Knife":["0"],
+			"Ursus Knife":["0"]
+		},
+		"Pistols": {
+			"Desert Eagle": ["Heirloom"],
+			"Glock-18": ["0"],
+			"USP-S": ["0"],
+			"CZ75-Auto":["0"],
+			"P250":["0"],
+			"R8 Revolver":["0"],
+			"Dual Berettas":["0"],
+			"Five-SeveN":["0"],
+			"P2000":["0"],
+			"Tec-9":["0"]
+		},
+		"Submachine Guns":{
+			"P90": ["Alien", "Darkness", "Blind Spot"],
+			"MP5-SD": ["Phosphorus", "Nitro", "Skilled Hands"]
+			
+		},
+		"Rifles": {
+			"AK-47": ["Jaguar","Safari Mesh", "African Mesh", "Redline"],
+			"M4A4": ["Asimov", "Desert Storm", "Neon Rider"],
+			"AWP": ["African Mesh", "Exoskeleton", "Speed Beast"]
+		},
+		"Heavy Weapons":{"a":["0"]},
+		"Grenades":{"a":["0"]}
   },
-  "QUALITY": ["Factory New", "Minimal Wear", "Field-Tested", "Well-Worn", "Battle-Scarred"],
-  "SKINS": ["Safari", "African Mesh", "Redline", "Asimov"]
+	"QUALITY": ["Factory New", "Minimal Wear", "Field-Tested", "Well-Worn", "Battle-Scarred"]
 }
