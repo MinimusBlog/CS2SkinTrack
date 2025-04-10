@@ -2,18 +2,33 @@ import os,telebot,json,requests,logging
 from telebot import types
 from time import sleep
 from dotenv import load_dotenv
+<<<<<<< HEAD
 from datetime import datetime
 import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
 
 load_dotenv()
 url = os.getenv("STEAM_MARKET")
+=======
+from bs4 import BeautifulSoup
+load_dotenv()
+url = "https://steamcommunity.com/market/listings/730/"
+>>>>>>> d10df0ad0296d1a73ddc785fd37664ab074aeb22
 get_text = False
 page = 0
 sticker_name = ""
 pg = 0
 
+<<<<<<< HEAD
 def register_handlers(bot):
+=======
+# Настройка логирования
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
+def register_handlers(bot):
+    
+    url = "https://steamcommunity.com/market/listings/730/"
+>>>>>>> d10df0ad0296d1a73ddc785fd37664ab074aeb22
     data_file_path = os.path.join(os.path.dirname(__file__), "data.json")
     with open(data_file_path, "r", encoding="utf-8") as file:
         data = file.read()
@@ -52,7 +67,11 @@ def register_handlers(bot):
         global get_text
         global page
         global pg
+<<<<<<< HEAD
 
+=======
+   
+>>>>>>> d10df0ad0296d1a73ddc785fd37664ab074aeb22
         @bot.message_handler(content_types=['text'])
         def message_input(message):
             global page
@@ -68,7 +87,11 @@ def register_handlers(bot):
                 cnt = 54
                 while render_req.text[cnt] in NUM:
                     cnt += 1
+<<<<<<< HEAD
                 bot.send_message(message.chat.id,"Всего оружия: "+render_req.text[54:cnt])
+=======
+                bot.send_message(message.chat.id,"всего пушек: "+render_req.text[54:cnt])
+>>>>>>> d10df0ad0296d1a73ddc785fd37664ab074aeb22
                 page = int(render_req.text[54:cnt])//10+1
                 menu_next(message)
                 get_text = False
@@ -102,7 +125,11 @@ def register_handlers(bot):
                 url+= "%28" + callback.data.replace(" ","%20") + "%29"
                 get_text = True
                 bot.send_message(callback.message.chat.id,"Введите имена стикеров:")
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> d10df0ad0296d1a73ddc785fd37664ab074aeb22
         for tip in CATEGORY:
             if callback.data == tip:
                 menu_guns(callback.message,callback.data)
@@ -116,7 +143,11 @@ def register_handlers(bot):
                         menu_quality(callback.message,callback.data)
                         url+= "%7C%20" + callback.data.replace(" ","%20") + "%20"
 
+<<<<<<< HEAD
     @bot.message_handler(func=lambda message: message.text == 'Анализ рынка')
+=======
+    @bot.message_handler(func=lambda message: message.text == 'Парсинг!')
+>>>>>>> d10df0ad0296d1a73ddc785fd37664ab074aeb22
     def menu_category(message):
         markup = types.InlineKeyboardMarkup()
         for tip in CATEGORY:
@@ -148,6 +179,7 @@ def register_handlers(bot):
         
     def menu_end(message):
         bot.send_message(message.chat.id,"конец списка.")
+<<<<<<< HEAD
 
     def get_cbr_rates():
         url = os.getenv("CBR_CURRENCY")
@@ -199,6 +231,8 @@ def register_handlers(bot):
     @bot.message_handler(content_types=['document']) #Обработчик для документов
     def handle_document_message(message):
         bot.send_message(message.chat.id, "Извините, я не могу обрабатывать документы. Пожалуйста, воспользуйтесь текстовыми сообщениями или кнопкой 'Помощь'.")
+=======
+>>>>>>> d10df0ad0296d1a73ddc785fd37664ab074aeb22
 
     @bot.message_handler(content_types=['voice']) #Обработчик для голосовых сообщений
     def handle_voice_message(message):
