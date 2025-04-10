@@ -29,9 +29,8 @@ def getMessage():
 @app.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://33c6-75-128-244-42.ngrok-free.app/" + bot_token)
+    bot.set_webhook(url="https://62bc-75-128-244-42.ngrok-free.app/" + bot_token)
     return "!", 200
 
 if __name__ == "__main__":
-    logger.info("Starting bot...")
     app.run(host="localhost", port=5000)  # Запуск на порту 5000
