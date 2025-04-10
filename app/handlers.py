@@ -1,4 +1,4 @@
-import os,telebot,json,requests
+import os,telebot,json,requests,logging
 from telebot import types
 from time import sleep
 from dotenv import load_dotenv
@@ -6,16 +6,14 @@ from bs4 import BeautifulSoup
 load_dotenv()
 url = "https://steamcommunity.com/market/listings/730/"
 get_text = False
-out = False
 page = 0
 sticker_name = ""
 pg = 0
-#from telebot import types
-#import logging
+
 
 # Настройка логирования
-#logging.basicConfig(level=logging.INFO)
-#logger = logging.getLogger()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 def register_handlers(bot):
     
     url = "https://steamcommunity.com/market/listings/730/"
@@ -33,7 +31,7 @@ def register_handlers(bot):
     
     @bot.message_handler(commands=['start'])
     def start_message(message):
-        #logger.info(f"Отправка /start {message.chat.id}")
+        logger.info(f"Отправка /start {message.chat.id}")
         # Создание клавиатуры
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
         item1 = types.KeyboardButton("Помощь")  # Кнопка "Помощь"
@@ -45,7 +43,7 @@ def register_handlers(bot):
 
     @bot.message_handler(func=lambda message: message.text == 'Помощь')
     def help_message(message):
-        #logger.info(f"Отправка помощи {message.chat.id}")
+        logger.info(f"Отправка помощи {message.chat.id}")
         instructions = """
         Инструкция по использованию бота:
         1. Выберите действие из меню.
@@ -59,16 +57,13 @@ def register_handlers(bot):
     def callback_message(callback):
         global url
         global get_text
-        global out
         global page
         global pg
    
         @bot.message_handler(content_types=['text'])
         def message_input(message):
             global page
-            global pg
             global url
-            global out
             global get_text
             global sticker_name
             if get_text:
@@ -163,3 +158,11 @@ def register_handlers(bot):
         
     def menu_end(message):
         bot.send_message(message.chat.id,"конец списка.")
+
+    @bot.message_handler(content_types=['voice']) #Обработчик для голосовых сообщений
+    def handle_voice_message(message):
+        bot.send_message(message.chat.id, "Извините, я не могу обрабатывать голосовые сообщения. Пожалуйста, воспользуйтесь текстовыми сообщениями или кнопкой 'Помощь'.")
+    @bot.message_handler(content_types=['sticker']) #Обработчик для стикеров
+    def handle_sticker_message(message):
+        bot.send_message(message.chat.id, "Извините, я не могу обрабатывать стикеры. Пожалуйста, воспользуйтесь текстовыми сообщениями или кнопкой 'Помощь'.")
+

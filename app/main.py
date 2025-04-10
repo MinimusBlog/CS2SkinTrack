@@ -9,7 +9,7 @@ logger = logging.getLogger()
 
 # Загрузка переменных окружения из .env файла
 load_dotenv()
-bot_token = os.getenv('TOKEN_D')
+bot_token = os.getenv('TELEBOT_TOKEN')
 
 app = Flask(__name__)
 bot = telebot.TeleBot(bot_token)
@@ -29,6 +29,6 @@ def webhook():
     bot.set_webhook(url="https://62bc-75-128-244-42.ngrok-free.app/" + bot_token)
     return "!", 200
 
-#if __name__ == "__main__":
-#    app.run(host="localhost", port=5000)  # Запуск на порту 5000
+if __name__ == "__main__":
+    app.run(host="localhost", port=5000)  # Запуск на порту 5000
 bot.infinity_polling()
