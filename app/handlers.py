@@ -125,3 +125,10 @@ def register_handlers(bot):
     #       markup.add(types.KeyboardButton(tip))#,callback_data=tip))
     #   bot.reply_to(message, "Выберите оружиt:",reply_markup=markup)
     #   bot.register_next_step_handler(message,on_click2)
+
+    @bot.message_handler(content_types=['voice']) #Обработчик для голосовых сообщений
+    def handle_voice_message(message):
+        bot.send_message(message.chat.id, "Извините, я не могу обрабатывать голосовые сообщения. Пожалуйста, воспользуйтесь текстовыми сообщениями или кнопкой 'Помощь'.")
+    @bot.message_handler(content_types=['sticker']) #Обработчик для стикеров
+    def handle_sticker_message(message):
+        bot.send_message(message.chat.id, "Извините, я не могу обрабатывать стикеры. Пожалуйста, воспользуйтесь текстовыми сообщениями или кнопкой 'Помощь'.")
