@@ -1,10 +1,15 @@
 {
-  "CATEGORY": ["Ножи", "Пистолеты", "Пистолеты-пулеметы", "Винтовки", "Тяжелое оружие", "Гранаты"],
+  "CATEGORY": ["Knives", "Pistols", "Submachine Guns", "Rifles", "Heavy Weapons", "Grenades"],
   "GUNS": {
-    "Ножи": ["Stock Knife", "Bayonet", "Butterfly Knife", "Falchion Knife", "Flip Knife", "Gut Knife", "Huntsman Knife", "Karambit"],
-    "Пистолеты": ["Glock-18", "USP-S", "Desert Eagle"],
-    "Винтовки": ["AK-47", "M4A4", "AWP"]
+    "AK-47": ["Safari", "African Mesh", "Redline"],
+    "M4A4": ["Asimov", "Desert Storm", "Neon Rider"],
+    "AWP": ["African Mesh", "Exoskeleton", "Speed Beast"],
+    "Desert Eagle": ["Directive", "Satellite", "Heritage"],
+    "Glock-18": ["Thunderstorm", "Volcano", "Blue Pearl"],
+    "USP-S": ["Serum", "Orion", "Tracing Paper"],
+    "P90": ["Alien", "Darkness", "Blind Spot"],
+    "MP5-SD": ["Phosphorus", "Nitro", "Skilled Hands"]
   },
   "QUALITY": ["Factory New", "Minimal Wear", "Field-Tested", "Well-Worn", "Battle-Scarred"],
-  "SKINS": ["Crimson Web", "Fade", "Slaughter", "Case Hardened"]
+  "SKINS": ["Safari", "African Mesh", "Redline", "Asimov"]
 }

@@ -3,7 +3,7 @@ from telebot import types
 from dotenv import load_dotenv
 load_dotenv()
 url = "https://steamcommunity.com/market/listings/730/" #Desert%20Eagle%20%7C%20Sputnik%20%28Battle-Scarred%29"?filter=confetty
-done = False
+get_text = False
 #bot = telebot.TeleBot(TOKEN,parse_mode=None)
 
 
@@ -13,15 +13,13 @@ done = False
 # Настройка логирования
 #logging.basicConfig(level=logging.INFO)
 #logger = logging.getLogger()
-
 def register_handlers(bot):
-    done = False
-    url = "https://steamcommunity.com/market/listings/730/"
-    # Укажите полный путь к файлу
+    get_text = False
+    url = "https://steamcommunity.com/market/listings/730/" #Desert%20Eagle%20%7C%20Sputnik%20%28Battle-Scarred%29"
     data_file_path = os.path.join(os.path.dirname(__file__), "data.json")
     with open(data_file_path, "r", encoding="utf-8") as file:
         data = file.read()
-    CATEGORY = json.loads(data)["CATEGORY"]
+    CATEGORY = json.loads(data)["CATEGORY"]#os.getenv("CATEGORY").split(",")
     GUNS = json.loads(data)["GUNS"]
     QUALITY = json.loads(data)["QUALITY"]
     SKINS = json.loads(data)["SKINS"]
@@ -40,6 +38,7 @@ def register_handlers(bot):
 
     @bot.message_handler(func=lambda message: message.text == 'Помощь')
     def help_message(message):
+        #logger.info(f"Отправка помощи {message.chat.id}")
         instructions = """
         Инструкция по использованию бота:
         1. Выберите действие из меню.
@@ -47,20 +46,30 @@ def register_handlers(bot):
         """
         bot.send_message(message.chat.id, instructions)
     
+   
+
     @bot.callback_query_handler(func=lambda callback: True)
     def callback_message(callback):
         global url
-        global done
-        if done==True:
-            url += "?filter="+callback.data.replace(" ","%20")
-            print(url)
-            done = False
+        global get_text
+        @bot.message_handler(content_types=['text'])
+        def message_input(message):
+            global url
+            global get_text
+            if get_text:
+                if len(message.text)>1:
+                    url += "?filter="+message.text.replace(" ","%20")
+                print(url)
+                bot.send_message(message.chat.id,url)
+                get_text = False
+                
+        #bot.register_next_step_handler(callback.message,message_input)
         #bot.delete_message(callback.message.chat.id,callback.message.message_id-1)
         for q in QUALITY:
             if callback.data == q:
                 url+= "%28" + callback.data.replace(" ","%20") + "%29"
+                get_text = True
                 bot.send_message(callback.message.chat.id,"Введите имена стикеров:")
-                done = True
                 #bot.send_message(callback.message.chat.id, "Введите имена стикеров:")
                 
         for skin in SKINS:
@@ -76,6 +85,7 @@ def register_handlers(bot):
                 if callback.data == gun:
                     url = url + callback.data.replace(" ","%20") + "%20"
                     menu_skins(callback.message,callback.data)
+             
         
         
         print(url)
