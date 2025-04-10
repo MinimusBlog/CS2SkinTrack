@@ -1,3 +1,6 @@
+import requests
+from datetime import datetime
+import xml.etree.ElementTree as ET
 import os,telebot,json
 from telebot import types
 from dotenv import load_dotenv
@@ -118,27 +121,40 @@ def register_handlers(bot):
 
     #Конвертер
 
-    # Статичные курсы валют
-    STATIC_RATES = {
-        "USD": 0.0105,
-        "EUR": 0.0097,
-        "GBP": 0.0083,
-        "KZT": 4.7
-    }
-
-    @bot.message_handler(func=lambda message: message.text == "Конвертация")
+    def get_cbr_rates():
+        url = "https://www.cbr.ru/scripts/XML_daily.asp"
+        response = requests.get(url)
+        response.encoding = 'windows-1251'
+        root = ET.fromstring(response.text)
+        needed = {'USD', 'EUR', 'GBP', 'KZT'}
+        rates = {}
+        for valute in root.findall('Valute'):
+            char_code = valute.find('CharCode').text
+            if char_code in needed:
+                nominal = int(valute.find('Nominal').text)
+                value = float(valute.find('Value').text.replace(',', '.'))
+                rates[char_code] = round(value / nominal, 4)
+        return rates
+    
+    def convert_rub_to_others(amount_rub):
+        rates = get_cbr_rates()
+        converted = {cur: round(amount_rub / rate, 2) for cur, rate in rates.items()}
+        return converted
+   
+    @bot.message_handler(func=lambda message: message.text == 'Конвертация')
+    
     def ask_amount(message):
-        msg = bot.send_message(message.chat.id, "Введите сумму в рублях:")
-        bot.register_next_step_handler(msg, convert_currency)
+        msg = bot.send_message(message.chat.id, "Введите сумму в рублях для конвертации:")
+        bot.register_next_step_handler(msg, convert_currency_step)
 
-    def convert_currency(message):
+    
+    def convert_currency_step(message):
         try:
             amount_rub = float(message.text)
-            result = [f"{amount_rub:.2f} RUB = {amount_rub * rate:.2f} {currency}" 
-                      for currency, rate in STATIC_RATES.items()]
-            bot.send_message(message.chat.id, "\n".join(result))
+            converted = convert_rub_to_others(amount_rub)
+            text = f"{amount_rub} RUB эквивалентно:\n"
+            for cur, val in converted.items():
+                text += f"💱 {val} {cur}\n"
+            bot.send_message(message.chat.id, text)
         except ValueError:
-            bot.send_message(message.chat.id, "Цифры набирай не буквы.")
-
-
-   
+            bot.send_message(message.chat.id, "Введите корректную сумму.")
