@@ -40,7 +40,6 @@ def register_handlers(bot):
 
     @bot.message_handler(func=lambda message: message.text == 'Помощь')
     def help_message(message):
-        #logger.info(f"Отправка помощи {message.chat.id}")
         instructions = """
         Инструкция по использованию бота:
         1. Выберите действие из меню.
