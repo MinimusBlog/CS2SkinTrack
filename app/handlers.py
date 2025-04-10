@@ -2,16 +2,9 @@ import os,telebot,json
 from telebot import types
 from dotenv import load_dotenv
 load_dotenv()
-
-#TOKEN = os.getenv("TOKEN")
-TOKEN = "7614655036:AAE_8ucrC55szdKOlbTnfbU4tB5UpoB1_Vo"
-with open("data.json","r") as file:
-    data = file.read()
-CATEGORY = json.loads(data)["CATEGORY"]#os.getenv("CATEGORY").split(",")
-GUNS = json.loads(data)["GUNS"]
-tmp = ""
-
-bot = telebot.TeleBot(TOKEN,parse_mode=None)
+url = "https://steamcommunity.com/market/listings/730/" #Desert%20Eagle%20%7C%20Sputnik%20%28Battle-Scarred%29"?filter=confetty
+done = False
+#bot = telebot.TeleBot(TOKEN,parse_mode=None)
 
 
 #from telebot import types
@@ -20,8 +13,16 @@ bot = telebot.TeleBot(TOKEN,parse_mode=None)
 # Настройка логирования
 #logging.basicConfig(level=logging.INFO)
 #logger = logging.getLogger()
-
 def register_handlers(bot):
+    done = False
+    url = "https://steamcommunity.com/market/listings/730/" #Desert%20Eagle%20%7C%20Sputnik%20%28Battle-Scarred%29"
+    with open("data.json","r") as file:
+        data = file.read()
+    CATEGORY = json.loads(data)["CATEGORY"]#os.getenv("CATEGORY").split(",")
+    GUNS = json.loads(data)["GUNS"]
+    QUALITY = json.loads(data)["QUALITY"]
+    SKINS = json.loads(data)["SKINS"]
+    
     @bot.message_handler(commands=['start'])
     def start_message(message):
         #logger.info(f"Отправка /start {message.chat.id}")
@@ -43,35 +44,76 @@ def register_handlers(bot):
         2. Следуйте инструкциям на экране.
         """
         bot.send_message(message.chat.id, instructions)
+    
+   
+
+    @bot.callback_query_handler(func=lambda callback: True)
+    def callback_message(callback):
+        global url
+        global done
+        if done==True:
+            url += "?filter="+callback.data.replace(" ","%20")
+            print(url)
+            done = False
+        #bot.delete_message(callback.message.chat.id,callback.message.message_id-1)
+        for q in QUALITY:
+            if callback.data == q:
+                url+= "%28" + callback.data.replace(" ","%20") + "%29"
+                bot.send_message(callback.message.chat.id,"Введите имена стикеров:")
+                done = True
+                #bot.send_message(callback.message.chat.id, "Введите имена стикеров:")
+                
+        for skin in SKINS:
+            if callback.data == skin:
+                url+= "%7C%20" + callback.data.replace(" ","%20") + "%20"
+                menu_quality(callback.message,callback.data)
+        for tip in CATEGORY:
+            if callback.data == tip:
+                #bot.send_message(callback.message.chat.id,callback.data)
+                menu_guns(callback.message,callback.data)
+                #bot.delete_message(callback.message.chat.id,callback.message.message_id-1)
+            for gun in GUNS[tip]:
+                if callback.data == gun:
+                    url = url + callback.data.replace(" ","%20") + "%20"
+                    menu_skins(callback.message,callback.data)
+             
+        
+        
+        print(url)
+    
     @bot.message_handler(func=lambda message: message.text == 'Парсинг!')
-    def welcome(message):
+    def menu_category(message):
         markup = types.InlineKeyboardMarkup()
         for tip in CATEGORY:
             markup.add(types.InlineKeyboardButton(tip,callback_data=tip))
         bot.reply_to(message, "Выберите тип оружия:",reply_markup=markup)
-        bot.register_next_step_handler(message,on_click)
-        def menu(message):
-            markup = types.InlineKeyboardMarkup()
-            for gun in GUNS[tmp]:
-                markup.add(types.InlineKeyboardButton(gun,callback_data=gun))
-            bot.reply_to(message, "Выберите оружие:",reply_markup=markup)
+#        bot.register_next_step_handler(message,menu_guns)
 
-        def on_click(message):
-            if True:
-               bot.send_message(message.chat.id,message.text)
-               markup = types.ReplyKeyboardMarkup()
-               for gun in GUNS:
-                   markup.add(types.KeyboardButton(tip))#,callback_data=tip))
-               bot.reply_to(message, "Выберите оружиt:",reply_markup=markup)
-               bot.register_next_step_handler(message,on_click2)
+    def menu_guns(message,tmp):
+        markup = types.InlineKeyboardMarkup()
+        for gun in GUNS[tmp]:
+            markup.add(types.InlineKeyboardButton(gun,callback_data=gun))
+        bot.reply_to(message, "Выберите оружие:",reply_markup=markup)
+    
+    def menu_skins(message,tmp):
+        markup = types.InlineKeyboardMarkup()
+        for skin in SKINS:
+            markup.add(types.InlineKeyboardButton(skin,callback_data=skin))
+        bot.reply_to(message, "Выберите скин:",reply_markup=markup)
+        
 
-        @bot.callback_query_handler(func=lambda callback: True)
-        def callback_message(callback):
-            for tip in CATEGORY:
-                if callback.data == tip:
-                    tmp=tip
-                    bot.send_message(callback.message.chat.id,tip)
-                    menu(callback.message)
-            for gun in GUNS[tmp]:
-                if callback.data == gun:
-                    bot.send_message(callback.message.chat.id,gun)
+    def menu_quality(message,tmp):
+        markup = types.InlineKeyboardMarkup()
+        for q in QUALITY:
+            markup.add(types.InlineKeyboardButton(q,callback_data=q))
+        bot.reply_to(message, "Выберите качество:",reply_markup=markup)
+
+
+    #def menu_category(message):
+    #   bot.send_message(message.chat.id,message.text)
+    #   markup = types.ReplyKeyboardMarkup()
+    #   for gun in GUNS:
+    #       markup.add(types.KeyboardButton(tip))#,callback_data=tip))
+    #   bot.reply_to(message, "Выберите оружиt:",reply_markup=markup)
+    #   bot.register_next_step_handler(message,on_click2)
+

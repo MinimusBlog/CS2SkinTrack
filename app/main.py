@@ -6,15 +6,15 @@ from dotenv import load_dotenv
 from handlers import register_handlers
 
 # Настройка логирования
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger()
+#logging.basicConfig(level=logging.INFO)
+#logger = logging.getLogger()
 
 # Загрузка переменных окружения из .env файла
 load_dotenv()
-bot_token = os.getenv('TELEBOT_TOKEN')
+#bot_token = os.getenv('TELEBOT_TOKEN')
 
-app = Flask(__name__)
-bot = telebot.TeleBot(bot_token)
+#app = Flask(__name__)
+bot = telebot.TeleBot(os.getenv("TOKEN_D"))
 
 register_handlers(bot)# Регистрация обработчиков
 
