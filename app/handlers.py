@@ -8,10 +8,6 @@ from bs4 import BeautifulSoup
 
 load_dotenv()
 url = os.getenv("STEAM_MARKET")
-get_text = False
-page = 0
-sticker_name = ""
-pg = 0
 
 def register_handlers(bot):
     data_file_path = os.path.join(os.path.dirname(__file__), "data.json")
@@ -117,6 +113,7 @@ def register_handlers(bot):
                         url+= "%7C%20" + callback.data.replace(" ","%20") + "%20"
 
     @bot.message_handler(func=lambda message: message.text == 'Анализ рынка')
+
     def menu_category(message):
         markup = types.InlineKeyboardMarkup()
         for tip in CATEGORY:
