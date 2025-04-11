@@ -1,5 +1,5 @@
 {
-  "CATEGORY": ["Knives", "Pistols", "Submachine Guns", "Rifles", "Heavy Weapons", "Grenades"],
+  "CATEGORY": ["Knives", "Pistols", "Submachine Guns", "Rifles", "Heavy Weapons"],
   "GUNS":{
 		"Knives":{
 			"Bayonet":["0"],
@@ -36,17 +36,38 @@
 			"Tec-9":["0"]
 		},
 		"Submachine Guns":{
-			"P90": ["Alien", "Darkness", "Blind Spot"],
-			"MP5-SD": ["Phosphorus", "Nitro", "Skilled Hands"]
-			
+			"MAC-10": ["0"],
+			"MP5-SD": ["0"],
+			"MP7":["0"],
+			"MP9":["0"],
+			"PP-Bizon":["0"],
+			"P90":["0"],
+			"UMP-45":["0"]
 		},
 		"Rifles": {
-			"AK-47": ["Jaguar","Safari Mesh", "African Mesh", "Redline"],
-			"M4A4": ["Asimov", "Desert Storm", "Neon Rider"],
-			"AWP": ["African Mesh", "Exoskeleton", "Speed Beast"]
+			"AK-47": ["Jaguar"],
+			"AUG":["0"],
+			
+			"AWP": ["0"],
+			"FAMAS":["0"],
+			"G3SG1":["0"],
+			"Galil AR":["0"],
+			"M4A1-S": ["0"],
+			"M4A4": ["0"],
+			"SCAR-20": ["0"],
+			"SG 553": ["0"],
+			"SSG 08": ["0"]
+			
 		},
-		"Heavy Weapons":{"a":["0"]},
-		"Grenades":{"a":["0"]}
+		"Heavy Weapons":{
+			"MAG-7": ["0"],
+			"Nova": ["0"],
+			"Sawed-Off": ["0"],
+			"XM1014": ["0"],
+			"M249": ["0"],
+			"Negev": ["0"]
+			
+		}
   	},
 	"QUALITY": ["Factory New", "Minimal Wear", "Field-Tested", "Well-Worn", "Battle-Scarred"]
 }
