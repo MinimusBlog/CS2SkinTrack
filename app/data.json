@@ -47,10 +47,6 @@
 		},
 		"Heavy Weapons":{"a":["0"]},
 		"Grenades":{"a":["0"]}
-  },
+  	},
 	"QUALITY": ["Factory New", "Minimal Wear", "Field-Tested", "Well-Worn", "Battle-Scarred"]
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> d10df0ad0296d1a73ddc785fd37664ab074aeb22
