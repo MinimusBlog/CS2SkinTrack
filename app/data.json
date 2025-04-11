@@ -2,9 +2,9 @@
   "CATEGORY": ["Knives", "Pistols", "Submachine Guns", "Rifles", "Heavy Weapons", "Grenades"],
   "GUNS":{
 		"Knives":{
-			"Bayonet":["0"],
-			"Bowie Knife":["0"],
-			"Butterfly Knife":["0"],
+			"Bayonet":["Tiger Tooth", "Freehand", "Slaughter"],
+			"Bowie Knife":["Lore", "Black Laminate"],
+			"Butterfly Knife":["Ultraviolet", "Stained", "Night"],
 			"Classic Knife":["0"],
 			"Falchion Knife":["0"],
 			"Flip Knife":["0"],
@@ -25,14 +25,14 @@
 		},
 		"Pistols": {
 			"Desert Eagle": ["Heirloom"],
-			"Glock-18": ["0"],
+			"Glock-18": ["Vogue", "AXIA", "Water Elemental"],
 			"USP-S": ["0"],
 			"CZ75-Auto":["0"],
 			"P250":["0"],
 			"R8 Revolver":["0"],
 			"Dual Berettas":["0"],
 			"Five-SeveN":["Angry Mob", "Hyper Beast"],
-			"P2000":["0"],
+			"P2000":["Amber Fade", "Wicked Sicjk", "Sure Grip"],
 			"Tec-9":["Decimator", "Isaac"]
 		},
 		"Submachine Guns":{
