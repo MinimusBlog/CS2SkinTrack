@@ -56,3 +56,38 @@ Open the link in browser
 Next, click on visit site
 
 Done, if you see '!'
+
+### Запуск (2 способ)
+
+Устанавливаем
+```
+npm install -g localtunnel
+```
+
+Далее проверяем, что lt установился
+
+```
+npm list -g localtunnel
+```
+
+Запускаем в терминале
+```
+npx localtunnel --port 5000
+```
+
+Полученный url вставляем до '/' в webhook method [GET]
+```
+https://example.loca.lt
+```
+
+После установки, запускаем main.py
+```
+python app/main.py
+```
+
+Открываем localhost для запуска webhook
+```
+http://localhost:5000/
+```
+
+Успех! Веб-сервер запущен. 😀
