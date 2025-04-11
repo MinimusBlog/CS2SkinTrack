@@ -31,9 +31,9 @@
 			"P250":["0"],
 			"R8 Revolver":["0"],
 			"Dual Berettas":["0"],
-			"Five-SeveN":["0"],
+			"Five-SeveN":["Angry Mob", "Hyper Beast"],
 			"P2000":["0"],
-			"Tec-9":["0"]
+			"Tec-9":["Decimator", "Isaac"]
 		},
 		"Submachine Guns":{
 			"P90": ["Alien", "Darkness", "Blind Spot"],
