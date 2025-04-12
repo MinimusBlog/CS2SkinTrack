@@ -8,10 +8,6 @@ from bs4 import BeautifulSoup
 
 load_dotenv()
 url = os.getenv("STEAM_MARKET")
-=======
-from bs4 import BeautifulSoup
-load_dotenv()
-url = "https://steamcommunity.com/market/listings/730/"
 
 def register_handlers(bot):
     data_file_path = os.path.join(os.path.dirname(__file__), "data.json")
